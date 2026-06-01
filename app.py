@@ -4,20 +4,16 @@ from datetime import datetime, timezone, timedelta
 
 app = Flask(__name__)
 
-# ── Configuração ──────────────────────────────────────────────
-# No Render: credenciais via variáveis de ambiente (META_ACCESS_TOKEN / META_ACCOUNT_ID)
-# Em dev: banco SQLite local
+
 _DATA_DIR   = os.path.dirname(__file__)
 DB_PATH     = os.path.join(_DATA_DIR, 'settings.db')
 META_API    = 'https://graph.facebook.com/v21.0'
 LEAD_FIELDS = 'campaign_id,campaign_name,impressions,clicks,spend,ctr,cpm,cpc,frequency,reach,actions,action_values'
 
-# Fuso horário de Brasília (UTC-3)
 TZ_BR = timezone(timedelta(hours=-3))
 
-# ── Cache simples em memória ──────────────────────────────────
-_cache = {}   # {key: (timestamp, data)}
-CACHE_TTL = 300  # 5 minutos
+_cache = {}
+CACHE_TTL = 300 
 
 def cache_get(key):
     if key in _cache:
@@ -31,10 +27,8 @@ def cache_set(key, data):
     _cache[key] = (time.time(), data)
 
 def cache_bust():
-    """Limpa todo o cache (chamado após salvar settings)"""
     _cache.clear()
 
-# ── Banco de dados ────────────────────────────────────────────
 def get_db():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
