@@ -83,6 +83,14 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
 body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;font-size:14px;-webkit-font-smoothing:antialiased;}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:6px;}
+::-webkit-scrollbar-thumb:hover{background:var(--text2);}
+*{scrollbar-width:thin;scrollbar-color:var(--border2) transparent;}
+
 .icon{font-family:'Material Icons Round';font-weight:400;font-style:normal;font-size:20px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-smoothing:antialiased;user-select:none;vertical-align:middle;}
 .icon-sm{font-size:16px;} .icon-lg{font-size:24px;}
 
