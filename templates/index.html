@@ -6,6 +6,9 @@
 <title>Consig Tech — Meta Ads Dashboard</title>
 <meta name="description" content="Dashboard de análise de campanhas Meta Ads para Consig Tech Promotora"/>
 <link rel="icon" type="image/png" href="/static/img/Logo.png"/>
+<!-- Preconnect para carregar fontes mais rápido -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -383,10 +386,9 @@ tbody tr:hover .row-arrow{color:var(--blue);}
 }
 
 .hidden{display:none!important;}
-.icon{visibility:hidden;}
-body.fonts-ready .icon{visibility:visible;}
-body:not(.fonts-ready) .nav-btn{opacity:0;}
-body.fonts-ready .nav-btn{opacity:1;transition:opacity .2s;}
+/* Ícones sempre visíveis — evita sidebar em branco no Render */
+.icon{visibility:visible;}
+.nav-btn{opacity:1;}
 </style>
 </head>
 <body>
