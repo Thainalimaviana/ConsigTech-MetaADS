@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: consigtech-ads
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 2 --threads 4 --timeout 120 --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+      # Opcional: defina no painel Render → Environment (substitui o que for salvo via UI)
+      # - key: META_ACCOUNT_ID
+      #   value: ""
+      # - key: META_ACCESS_TOKEN
+      #   value: ""
+
+    # DISCO PERSISTENTE — necessário para salvar credenciais entre deploys
+    # Requer plano pago no Render ($7/mês). Sem isso, credenciais são perdidas a cada deploy.
+    # Comente as linhas abaixo se for usar apenas variáveis de ambiente (META_ACCESS_TOKEN / META_ACCOUNT_ID).
+    disk:
+      name: consigtech-db
+      mountPath: /data
+      sizeGB: 1

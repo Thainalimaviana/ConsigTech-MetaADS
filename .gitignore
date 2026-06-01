@@ -1,0 +1,22 @@
+# Banco local (no Render fica em /data)
+settings.db
+*.db
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+venv/
+.venv/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.suo
+.sixth/
+
+# OS
+.DS_Store
+Thumbs.db
