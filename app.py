@@ -5,8 +5,9 @@ from datetime import datetime, timezone, timedelta
 app = Flask(__name__)
 
 # ── Configuração ──────────────────────────────────────────────
-# Usa disco persistente do Render em produção, local em dev
-_DATA_DIR   = '/data' if os.path.isdir('/data') else os.path.dirname(__file__)
+# No Render: credenciais via variáveis de ambiente (META_ACCESS_TOKEN / META_ACCOUNT_ID)
+# Em dev: banco SQLite local
+_DATA_DIR   = os.path.dirname(__file__)
 DB_PATH     = os.path.join(_DATA_DIR, 'settings.db')
 META_API    = 'https://graph.facebook.com/v21.0'
 LEAD_FIELDS = 'campaign_id,campaign_name,impressions,clicks,spend,ctr,cpm,cpc,frequency,reach,actions,action_values'

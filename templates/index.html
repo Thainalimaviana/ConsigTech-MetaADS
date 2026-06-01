@@ -104,7 +104,7 @@ body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);dis
 .acct-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;margin-right:5px;box-shadow:0 0 6px var(--green);}
 
 /* ── Main ────────────────────────────────────────────────── */
-.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;overflow:hidden;}
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden;}
 
 /* ── Topbar ──────────────────────────────────────────────── */
 .topbar{height:var(--topbar-h);background:var(--topbar-bg);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50;overflow:visible;}
@@ -790,26 +790,38 @@ window._loaded=false;
 let _settingsDirty=false;
 
 // ── Startup ───────────────────────────────────────────────────
-document.fonts.ready.then(()=>{ document.body.classList.add('fonts-ready'); });
-
-// Aplica tema salvo ANTES de renderizar
+// Aplica tema salvo
 (function(){
-  const saved=localStorage.getItem('ct_theme')||'dark';
-  document.documentElement.setAttribute('data-theme',saved);
-  // ícone será corrigido depois que fonts carregarem
+  const saved = localStorage.getItem('ct_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
 })();
 
 async function initApp(){
+  // Corrige ícone de tema
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const ti = document.getElementById('themeIcon');
+  if(ti) ti.textContent = dark ? 'light_mode' : 'dark_mode';
+
   try{
-    const s=await fetch('/api/settings').then(r=>r.json());
-    if(s.account_id) document.getElementById('accountId').value=s.account_id;
-    if(s.has_token)  document.getElementById('accessToken').value='••••••••••••••••';
-    document.getElementById('accessToken').placeholder=s.has_token?`Token salvo (${s.token_preview})`:'Cole seu Access Token';
-    // Ajusta ícone do tema após carregar settings
-    const dark=document.documentElement.getAttribute('data-theme')==='dark';
-    document.getElementById('themeIcon').textContent=dark?'light_mode':'dark_mode';
-    if(s.account_id&&s.has_token) loadData();
-  }catch(e){ console.warn('Settings load failed:',e); }
+    const r = await fetch('/api/settings');
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    const s = await r.json();
+    const ai = document.getElementById('accountId');
+    const at = document.getElementById('accessToken');
+    if(ai && s.account_id) ai.value = s.account_id;
+    if(at){
+      if(s.has_token) at.value = '••••••••••••••••';
+      at.placeholder = s.has_token ? `Token salvo (${s.token_preview})` : 'Cole seu Access Token';
+    }
+    // Só carrega dados se tiver credenciais configuradas
+    if(s.account_id && s.has_token) loadData();
+    else {
+      // Exibe dica para ir às configurações
+      console.info('Sem credenciais. Configure em Configurações ou via env vars no Render.');
+    }
+  }catch(e){
+    console.warn('initApp error:', e.message);
+  }
 }
 initApp();
 
